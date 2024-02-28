@@ -1,4 +1,7 @@
+import {cart} from '../data/cart.js';
+
 document.addEventListener('DOMContentLoaded', function() {
+
     let productsHTML = '';
 
     products.forEach((product) => {
@@ -42,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 <div class="product-spacer"></div>
 
-                <div class="added-to-cart">
+                <div class="added-to-cart js-added-product-${product.id}">
                     <img src="images/icons/checkmark.png">
                     Added
                 </div>
@@ -57,11 +60,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.querySelector(".js-products-grid").innerHTML = productsHTML;
+    let timerId;
 
     document.querySelectorAll('.js-add-to-cart')
     .forEach((button) => {
         button.addEventListener('click', () => {
-            const productId = button.dataset.productId;
+            const { productId } = button.dataset;
             let selectedQuantity = document.querySelector(`.js-quantity-selector-${productId}`).value;
             selectedQuantity = Number(selectedQuantity);
 
@@ -75,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (!matchingItem) {
                 cart.push({
-                    productId: productId,
+                    productId,
                     quantity: selectedQuantity
                 });
             } else {
@@ -90,27 +94,29 @@ document.addEventListener('DOMContentLoaded', function() {
             });
            
             document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
-        
+            
+            messageAdded = document.querySelector(`.js-added-product-${ productId}`);
+            
+            console.log(messageAdded);
+
+            if (messageAdded) {
+                messageAdded.style.opacity = 1;
+                
+                if (timerId) {
+                    clearTimeout(timerId);
+                }
+
+                timerId = setTimeout(() => {
+                    messageAdded.style.opacity = 0;
+                }, 2000);
+            }
+            
             console.log(cart);
 
         });
 
 
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 });
