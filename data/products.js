@@ -61,6 +61,36 @@ const products = [
     ]
   },
   {
+    id: "id1",
+    image: "images/products/umbrella.jpg",
+    name: "Purple Umbrealla",
+    rating: {
+      stars: 4,
+      count: 108
+    },
+    priceCents: 390,
+    keywords: [
+      "umbrella",
+      "rain",
+      "cover"
+    ]
+  },
+  {
+    id: "id2",
+    image: "images/products/backpack.jpg",
+    name: "Bag Pack Carry Items",
+    rating: {
+      stars: 4.5,
+      count: 6095
+    },
+    priceCents: 990,
+    keywords: [
+      "bag",
+      "bagpack",
+      "storing"
+    ]
+  },
+  {
     id: "3ebe75dc-64d2-4137-8860-1f5a963e534b",
     image: "images/products/6-piece-white-dinner-plate-set.jpg",
     name: "6 Piece White Dinner Plate Set",
@@ -149,25 +179,6 @@ const products = [
       "running shoes",
       "footwear"
     ]
-  },
-  {
-    id: "5968897c-4d27-4872-89f6-5bcb052746d7",
-    image: "images/products/women-chiffon-beachwear-coverup-black.jpg",
-    name: "Women's Chiffon Beachwear Cover Up - Black",
-    rating: {
-      stars: 4.5,
-      count: 235
-    },
-    priceCents: 2070,
-    keywords: [
-      "robe",
-      "swimsuit",
-      "swimming",
-      "bathing",
-      "apparel"
-    ],
-    type: "clothing",
-    sizeChartLink: "images/clothing-size-chart.png"
   },
   {
     id: "aad29d11-ea98-41ee-9285-b916638cac4a",
