@@ -209,3 +209,27 @@
   margin-top: 11px;
   margin-bottom: 15px;
 }
+
+.quantity-input,
+.save-quantity-link {
+  width: 30px;
+  display: none;
+}
+
+.save-quantity-link{
+  color: rgb(1, 124, 182);
+}
+
+.is-editing-quantity .quantity-input {
+  /* Your styles for quantity-input inside is-editing-quantity */
+  width: 60px;
+  display: inline-block;
+}
+
+.link-primary {
+  margin-right: 5px;
+}
+
+.link-primary:hover {
+  color: rgb(177, 39, 4);
+}

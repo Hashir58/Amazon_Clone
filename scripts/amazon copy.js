@@ -3,7 +3,7 @@ import { products } from '../data/products.js';
 
 
 document.addEventListener('DOMContentLoaded', function() {
-
+    updateCartQuantity();
     let productsHTML = '';
 
     products.forEach((product) => {
@@ -106,4 +106,3 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-
