@@ -1,13 +1,16 @@
-import {cart, addToCart} from '../data/cart.js';
-import { products } from '../data/products.js';
+import { cart, addToCart } from "../data/cart.js";
+import { products } from "../data/products.js";
+import { formatCurrency } from "./utils/money.js";
 
+document.addEventListener("DOMContentLoaded", function () {
+  // Initial call to update cart quantity display
+  updateCartQuantity();
 
-document.addEventListener('DOMContentLoaded', function() {
-    updateCartQuantity();
-    let productsHTML = '';
+  let productsHTML = "";
 
-    products.forEach((product) => {
-        productsHTML += `
+  // Loop through each product to generate HTML for the products list
+  products.forEach((product) => {
+    productsHTML += `
             <div class="product-container">
                 <div class="product-image-container">
                     <img class="product-image"
@@ -20,14 +23,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 <div class="product-rating-container">
                     <img class="product-rating-stars"
-                    src="images/ratings/rating-${product.rating.stars * 10}.png">
+                    src="images/ratings/rating-${
+                      product.rating.stars * 10
+                    }.png">
                     <div class="product-rating-count link-primary">
                     ${product.rating.count}
                     </div>
                 </div>
 
                 <div class="product-price">
-                    $${(product.priceCents / 100).toFixed(2)}
+                    $${formatCurrency(product.priceCents)}
                 </div>
 
                 <div class="product-quantity-container">
@@ -57,52 +62,64 @@ document.addEventListener('DOMContentLoaded', function() {
                 data-product-id="${product.id}">
                     Add to Cart
                 </button>
-                </div>
+            </div>
         `;
+  });
+
+  // Insert the generated HTML into the products grid container
+  document.querySelector(".js-products-grid").innerHTML = productsHTML;
+
+  let timerId;
+
+  function updateCartQuantity(productId) {
+    let cartQuantity = 0;
+
+    // Calculate total quantity of items in the cart
+    cart.forEach((cartItem) => {
+      cartQuantity += cartItem.quantity;
     });
 
-    document.querySelector(".js-products-grid").innerHTML = productsHTML;
-    let timerId;
+    // Update the cart quantity display
+    document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
 
-    function updateCartQuantity(productId) {
-        let cartQuantity = 0;
+    // Select the new message to display based on the product ID
+    let messageAdded = document.querySelector(`.js-added-product-${productId}`);
 
-        cart.forEach((cartItem) => {
-            cartQuantity += cartItem.quantity;
-        });
-       
-        document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
-        
-        let messageAdded = document.querySelector(`.js-added-product-${ productId}`);
-        
-        console.log(messageAdded);
+    console.log(messageAdded);
 
-        if (messageAdded) {
-            messageAdded.style.opacity = 1;
-            
-            if (timerId) {
-                clearTimeout(timerId);
-            }
+    if (messageAdded) {
+      // Ensure the message is visible
+      messageAdded.style.opacity = 1;
 
-            timerId = setTimeout(() => {
-                messageAdded.style.opacity = 0;
-            }, 2000);
-        }
+      // Clear previous timer if it exists
+      if (timerId) {
+        clearTimeout(timerId);
+      }
+
+      // Set a new timer to hide the message after 2 seconds
+      timerId = setTimeout(() => {
+        messageAdded.style.opacity = 0;
+      }, 1200);
     }
+  }
 
-    document.querySelectorAll('.js-add-to-cart')
-    .forEach((button) => {
-        button.addEventListener('click', () => {
-            const { productId } = button.dataset;
+  // Add event listeners to all "Add to Cart" buttons
+  document.querySelectorAll(".js-add-to-cart").forEach((button) => {
+    button.addEventListener("click", () => {
+      // Get the product ID from the button's data attribute
+      const { productId } = button.dataset;
 
-            let selectedQuantity = document.querySelector(`.js-quantity-selector-${productId}`).value;
-            selectedQuantity = Number(selectedQuantity);
+      // Get the selected quantity from the dropdown
+      let selectedQuantity = document.querySelector(
+        `.js-quantity-selector-${productId}`
+      ).value;
+      selectedQuantity = Number(selectedQuantity);
 
-            addToCart(productId, selectedQuantity);
-            updateCartQuantity(productId);
-            
-            console.log(cart);
+      // Add the selected quantity of the product to the cart
+      addToCart(productId, selectedQuantity);
 
-        });
+      // Update the cart quantity and show the "added to cart" message
+      updateCartQuantity(productId);
     });
+  });
 });
