@@ -13,35 +13,38 @@ const deliveryDate = today.add(7, "days");
 
 console.log(deliveryDate.format("dddd, MMMM D"));
 
-let cartSummaryHTML = "";
-
 updateCheckoutQuantity();
 
-cart.forEach((cartItem) => {
-  const productId = cartItem.productId;
-  let matchingProduct;
+function renderOrrderSummary() {
+  let cartSummaryHTML = "";
 
-  products.forEach((product) => {
-    if (product.id === productId) {
-      matchingProduct = product;
-    }
-  });
+  updateCheckoutQuantity();
 
-  const deliveryOptionId = cartItem.deliveryOptionId;
+  cart.forEach((cartItem) => {
+    const productId = cartItem.productId;
+    let matchingProduct;
 
-  let deliveryOption;
+    products.forEach((product) => {
+      if (product.id === productId) {
+        matchingProduct = product;
+      }
+    });
 
-  deliveryOptions.forEach((option) => {
-    if (option.id === deliveryOptionId) {
-      deliveryOption = option;
-    }
-  });
+    const deliveryOptionId = cartItem.deliveryOptionId;
 
-  const today = dayjs();
-  const deliveryDate = today.add(deliveryOption.deliveryDays, "days");
-  const dateString = deliveryDate.format("dddd, MMMM D");
+    let deliveryOption;
 
-  cartSummaryHTML += `
+    deliveryOptions.forEach((option) => {
+      if (option.id === deliveryOptionId) {
+        deliveryOption = option;
+      }
+    });
+
+    const today = dayjs();
+    const deliveryDate = today.add(deliveryOption.deliveryDays, "days");
+    const dateString = deliveryDate.format("dddd, MMMM D");
+
+    cartSummaryHTML += `
       <div class="cart-item-container js-cart-item-container-${
         matchingProduct.id
       }">
@@ -86,24 +89,24 @@ cart.forEach((cartItem) => {
         </div>
         </div>
     `;
-});
+  });
 
-function deliveryOptionsHtml(matchingProduct, cartItem) {
-  let html = "";
+  function deliveryOptionsHtml(matchingProduct, cartItem) {
+    let html = "";
 
-  deliveryOptions.forEach((deliveryOption) => {
-    const today = dayjs();
-    const deliveryDate = today.add(deliveryOption.deliveryDays, "days");
-    const dateString = deliveryDate.format("dddd, MMMM D");
+    deliveryOptions.forEach((deliveryOption) => {
+      const today = dayjs();
+      const deliveryDate = today.add(deliveryOption.deliveryDays, "days");
+      const dateString = deliveryDate.format("dddd, MMMM D");
 
-    const priceString =
-      deliveryOption.priceCents === 0
-        ? "FREE"
-        : `${formatCurrency(deliveryOption.priceCents)} -`;
+      const priceString =
+        deliveryOption.priceCents === 0
+          ? "FREE"
+          : `${formatCurrency(deliveryOption.priceCents)} -`;
 
-    const isCheck = deliveryOption.id === cartItem.deliveryOptionId;
+      const isCheck = deliveryOption.id === cartItem.deliveryOptionId;
 
-    html += `
+      html += `
     <div class="delivery-option js-delivery-option"
     data-product-id="${matchingProduct.id}" 
     data-delivery-option-id="${deliveryOption.id}">
@@ -120,12 +123,12 @@ function deliveryOptionsHtml(matchingProduct, cartItem) {
                 </div>
             </div>
     `;
-  });
+    });
 
-  return html;
-}
+    return html;
+  }
 
-let paymentSummaryHTML = `
+  let paymentSummaryHTML = `
 
           <div class="payment-summary-title">
             Order Summary
@@ -162,67 +165,98 @@ let paymentSummaryHTML = `
 
 `;
 
-document.querySelector(".order-summary").innerHTML = cartSummaryHTML;
+  document.querySelector(".order-summary").innerHTML = cartSummaryHTML;
 
-document.querySelectorAll(".js-delete-link").forEach((link) => {
-  link.addEventListener("click", () => {
-    const productId = link.dataset.productId;
-    removeFromCart(productId);
+  document.querySelectorAll(".js-delete-link").forEach((link) => {
+    link.addEventListener("click", () => {
+      const productId = link.dataset.productId;
+      removeFromCart(productId);
 
-    const conatiner = document.querySelector(
-      `.js-cart-item-container-${productId}`
-    );
+      const conatiner = document.querySelector(
+        `.js-cart-item-container-${productId}`
+      );
 
-    updateCheckoutQuantity();
+      updateCheckoutQuantity();
 
-    conatiner.remove();
+      conatiner.remove();
+    });
   });
-});
 
-let count = 0;
+  let count = 0;
 
-document.querySelectorAll(".js-update-link").forEach((link) => {
-  link.addEventListener("click", () => {
-    const productId = link.dataset.productId;
-    //updateFromCart(productId);
+  document.querySelectorAll(".js-update-link").forEach((link) => {
+    link.addEventListener("click", () => {
+      const productId = link.dataset.productId;
+      //updateFromCart(productId);
 
-    const container = document.querySelector(
-      `.js-cart-item-container-${productId}`
-    );
+      const container = document.querySelector(
+        `.js-cart-item-container-${productId}`
+      );
 
-    if (count === 0) {
-      const newInput = document.createElement("input");
-      newInput.classList.add("quantity-input");
-      newInput.id = `quantity-input-${productId}`;
+      if (count === 0) {
+        const newInput = document.createElement("input");
+        newInput.classList.add("quantity-input");
+        newInput.id = `quantity-input-${productId}`;
 
-      const newSpan = document.createElement("span");
-      newSpan.classList.add("save-quantity-link", "link-primary");
-      newSpan.textContent = "Save";
+        const newSpan = document.createElement("span");
+        newSpan.classList.add("save-quantity-link", "link-primary");
+        newSpan.textContent = "Save";
 
-      // Insert new elements after the "Update" link
-      link.insertAdjacentElement("afterend", newSpan);
-      link.insertAdjacentElement("afterend", newInput);
+        // Insert new elements after the "Update" link
+        link.insertAdjacentElement("afterend", newSpan);
+        link.insertAdjacentElement("afterend", newInput);
 
-      setTimeout(() => {
-        newInput.focus();
-      }, 0);
+        setTimeout(() => {
+          newInput.focus();
+        }, 0);
 
-      // Hide quantity and "Update" link
-      const quantityLabel = container.querySelector(".quantity-label");
-      quantityLabel.style.display = "none";
-      link.style.display = "none";
+        // Hide quantity and "Update" link
+        const quantityLabel = container.querySelector(".quantity-label");
+        quantityLabel.style.display = "none";
+        link.style.display = "none";
 
-      newInput.style.display = "inline-block";
-      newSpan.style.display = "inline-block";
+        newInput.style.display = "inline-block";
+        newSpan.style.display = "inline-block";
 
-      newInput.addEventListener("keydown", (event) => {
-        if (event.key === "Enter") {
-          const newQuantity = parseInt(newInput.value);
+        newInput.addEventListener("keydown", (event) => {
+          if (event.key === "Enter") {
+            const newQuantity = parseInt(newInput.value);
 
+            if (
+              newQuantity !== "" &&
+              newQuantity != 0 &&
+              !(newQuantity > 1000)
+            ) {
+              quantityLabel.textContent = newQuantity;
+
+              // Update the cart quantity
+              updateQuantity(productId, newQuantity);
+
+              updateCheckoutQuantity();
+            } else {
+              console.error(
+                "Invalid quantity entered. Please enter a value between 0 and 999."
+              );
+            }
+
+            link.style.display = "inline-block";
+            quantityLabel.style.display = "inline-block";
+            newInput.style.display = "none";
+            newSpan.style.display = "none";
+
+            container.classList.remove("is-editing-quantity");
+
+            count--;
+          }
+        });
+
+        newSpan.addEventListener("click", () => {
+          const newQuantity = newInput.value.trim(); // Trim any leading/trailing whitespaces
+
+          // GPT TOLD ME COMPLETEY OVERLOOKED THIS LOL Update the cart quantity
           if (newQuantity !== "" && newQuantity != 0 && !(newQuantity > 1000)) {
             quantityLabel.textContent = newQuantity;
 
-            // Update the cart quantity
             updateQuantity(productId, newQuantity);
 
             updateCheckoutQuantity();
@@ -240,43 +274,37 @@ document.querySelectorAll(".js-update-link").forEach((link) => {
           container.classList.remove("is-editing-quantity");
 
           count--;
-        }
-      });
+        });
 
-      newSpan.addEventListener("click", () => {
-        const newQuantity = newInput.value.trim(); // Trim any leading/trailing whitespaces
+        count++;
+      }
 
-        // GPT TOLD ME COMPLETEY OVERLOOKED THIS LOL Update the cart quantity
-        if (newQuantity !== "" && newQuantity != 0 && !(newQuantity > 1000)) {
-          quantityLabel.textContent = newQuantity;
+      container.classList.add("is-editing-quantity");
 
-          updateQuantity(productId, newQuantity);
-
-          updateCheckoutQuantity();
-        } else {
-          console.error(
-            "Invalid quantity entered. Please enter a value between 0 and 999."
-          );
-        }
-
-        link.style.display = "inline-block";
-        quantityLabel.style.display = "inline-block";
-        newInput.style.display = "none";
-        newSpan.style.display = "none";
-
-        container.classList.remove("is-editing-quantity");
-
-        count--;
-      });
-
-      count++;
-    }
-
-    container.classList.add("is-editing-quantity");
-
-    console.log(productId);
+      console.log(productId);
+    });
   });
-});
+
+  function updateCheckoutQuantity() {
+    let cartQuantity = 0;
+
+    cart.forEach((cartItem) => {
+      cartQuantity += cartItem.quantity;
+    });
+
+    document.querySelector(
+      ".js-checkout-items"
+    ).innerHTML = `${cartQuantity} items`;
+  }
+
+  document.querySelectorAll(".js-delivery-option").forEach((element) => {
+    element.addEventListener("click", () => {
+      const { productId, deliveryOptionId } = element.dataset;
+      updateDeliveryOption(productId, deliveryOptionId);
+      renderOrrderSummary();
+    });
+  });
+}
 
 function updateCheckoutQuantity() {
   let cartQuantity = 0;
@@ -290,9 +318,4 @@ function updateCheckoutQuantity() {
   ).innerHTML = `${cartQuantity} items`;
 }
 
-document.querySelectorAll(".js-delivery-option").forEach((element) => {
-  element.addEventListener("click", () => {
-    const { productId, deliveryOptionId } = element.dataset;
-    updateDeliveryOption(productId, deliveryOptionId);
-  });
-});
+renderOrrderSummary();
