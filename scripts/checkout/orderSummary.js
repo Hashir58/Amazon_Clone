@@ -193,10 +193,14 @@ export function renderOrrderSummary() {
               );
             }
 
-            link.style.display = "inline-block";
-            quantityLabel.style.display = "inline-block";
             newInput.style.display = "none";
             newSpan.style.display = "none";
+            link.style.display = "inline-block";
+            quantityLabel.style.display = "inline-block";
+
+            //removing the input and span so next time new ones are created
+            newInput.remove();
+            newSpan.remove();
 
             container.classList.remove("is-editing-quantity");
 
@@ -220,10 +224,14 @@ export function renderOrrderSummary() {
             );
           }
 
-          link.style.display = "inline-block";
-          quantityLabel.style.display = "inline-block";
           newInput.style.display = "none";
           newSpan.style.display = "none";
+          link.style.display = "inline-block";
+          quantityLabel.style.display = "inline-block";
+
+          //removing the input and span so next time new ones are created
+          newInput.remove();
+          newSpan.remove();
 
           container.classList.remove("is-editing-quantity");
 
@@ -238,18 +246,6 @@ export function renderOrrderSummary() {
       console.log(productId);
     });
   });
-
-  function updateCheckoutQuantity() {
-    let cartQuantity = 0;
-
-    cart.forEach((cartItem) => {
-      cartQuantity += cartItem.quantity;
-    });
-
-    document.querySelector(
-      ".js-checkout-items"
-    ).innerHTML = `${cartQuantity} items`;
-  }
 
   document.querySelectorAll(".js-delivery-option").forEach((element) => {
     element.addEventListener("click", () => {
