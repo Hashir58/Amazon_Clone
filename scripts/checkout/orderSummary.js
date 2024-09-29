@@ -11,6 +11,8 @@ import {
   deliveryOptions,
   getDeliveryOption,
 } from "../../data/deliveryOptions.js";
+import { renderPaymentSummary } from "./paymentSummary.js";
+
 const today = dayjs();
 const deliveryDate = today.add(7, "days");
 
@@ -132,6 +134,7 @@ export function renderOrrderSummary() {
       );
 
       updateCheckoutQuantity();
+      renderPaymentSummary();
 
       conatiner.remove();
     });
@@ -188,6 +191,7 @@ export function renderOrrderSummary() {
               updateQuantity(productId, newQuantity);
 
               updateCheckoutQuantity();
+              renderPaymentSummary();
             } else {
               console.error(
                 "Invalid quantity entered. Please enter a value between 0 and 999."
@@ -257,6 +261,7 @@ export function renderOrrderSummary() {
       const { productId, deliveryOptionId } = element.dataset;
       updateDeliveryOption(productId, deliveryOptionId);
       renderOrrderSummary();
+      renderPaymentSummary();
     });
   });
 }
