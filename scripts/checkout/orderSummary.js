@@ -4,10 +4,13 @@ import {
   updateQuantity,
   updateDeliveryOption,
 } from "../../data/cart.js";
-import { products } from "../../data/products.js";
+import { products, getProduct } from "../../data/products.js";
 import { formatCurrency } from "../utils/money.js";
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
-import { deliveryOptions } from "../../data/deliveryOptions.js";
+import {
+  deliveryOptions,
+  getDeliveryOption,
+} from "../../data/deliveryOptions.js";
 const today = dayjs();
 const deliveryDate = today.add(7, "days");
 
@@ -22,23 +25,12 @@ export function renderOrrderSummary() {
 
   cart.forEach((cartItem) => {
     const productId = cartItem.productId;
-    let matchingProduct;
 
-    products.forEach((product) => {
-      if (product.id === productId) {
-        matchingProduct = product;
-      }
-    });
+    const matchingProduct = getProduct(productId);
 
     const deliveryOptionId = cartItem.deliveryOptionId;
 
-    let deliveryOption;
-
-    deliveryOptions.forEach((option) => {
-      if (option.id === deliveryOptionId) {
-        deliveryOption = option;
-      }
-    });
+    const deliveryOption = getDeliveryOption(deliveryOptionId);
 
     const today = dayjs();
     const deliveryDate = today.add(deliveryOption.deliveryDays, "days");
@@ -127,43 +119,6 @@ export function renderOrrderSummary() {
 
     return html;
   }
-
-  let paymentSummaryHTML = `
-  
-            <div class="payment-summary-title">
-              Order Summary
-            </div>
-  
-            <div class="payment-summary-row">
-              <div>Items (3):</div>
-              <div class="payment-summary-money">$42.75</div>
-            </div>
-  
-            <div class="payment-summary-row">
-              <div>Shipping &amp; handling:</div>
-              <div class="payment-summary-money">$4.99</div>
-            </div>
-  
-            <div class="payment-summary-row subtotal-row">
-              <div>Total before tax:</div>
-              <div class="payment-summary-money">$47.74</div>
-            </div>
-  
-            <div class="payment-summary-row">
-              <div>Estimated tax (10%):</div>
-              <div class="payment-summary-money">$4.77</div>
-            </div>
-  
-            <div class="payment-summary-row total-row">
-              <div>Order total:</div>
-              <div class="payment-summary-money">$52.51</div>
-            </div>
-  
-            <button class="place-order-button button-primary">
-              Place your order
-            </button>
-  
-  `;
 
   document.querySelector(".order-summary").innerHTML = cartSummaryHTML;
 
