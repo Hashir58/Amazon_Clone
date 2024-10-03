@@ -32,7 +32,7 @@ export function getDeliveryOption(deliveryOptionId) {
 
 export function calculateDeliveryDate(deliveryOption) {
   const today = dayjs();
-  const deliveryDate = today.add(deliveryOption.deliveryDays, "days");
+  let deliveryDate = today.add(deliveryOption.deliveryDays, "days");
 
   if (deliveryDate.day() === 6) {
     //6 means saturday
