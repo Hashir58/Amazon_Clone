@@ -621,11 +621,10 @@ export const products = [
   },
 ].map((productDetails) => {
   if (productDetails.type === "appliance") {
-    console.log("cehcking");
     return new Appliance(productDetails);
   }
+
   if (productDetails.type === "clothing") {
-    console.log("cehcking2");
     return new Clothing(productDetails);
   }
 
