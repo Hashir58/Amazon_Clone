@@ -1,6 +1,5 @@
-import { cart, addToCart } from "../data/cart.js";
+import { cart } from "../data/cart-class.js";
 import { products } from "../data/products.js";
-import { formatCurrency } from "./utils/money.js";
 
 document.addEventListener("DOMContentLoaded", function () {
   // Initial call to update cart quantity display
@@ -75,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let cartQuantity = 0;
 
     // Calculate total quantity of items in the cart
-    cart.forEach((cartItem) => {
+    cart.cartItems.forEach((cartItem) => {
       cartQuantity += cartItem.quantity;
     });
 
@@ -116,7 +115,7 @@ document.addEventListener("DOMContentLoaded", function () {
       selectedQuantity = Number(selectedQuantity);
 
       // Add the selected quantity of the product to the cart
-      addToCart(productId, selectedQuantity);
+      cart.addToCart(productId, selectedQuantity);
 
       // Update the cart quantity and show the "added to cart" message
       updateCartQuantity(productId);

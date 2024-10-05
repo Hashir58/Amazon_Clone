@@ -1,9 +1,4 @@
-import {
-  cart,
-  removeFromCart,
-  updateQuantity,
-  updateDeliveryOption,
-} from "../../data/cart.js";
+import { cart } from "../../data/cart-class.js";
 import { products, getProduct } from "../../data/products.js";
 import { formatCurrency } from "../utils/money.js";
 import {
@@ -20,7 +15,7 @@ export function renderOrrderSummary() {
 
   updateCheckoutQuantity();
 
-  cart.forEach((cartItem) => {
+  cart.cartItems.forEach((cartItem) => {
     const productId = cartItem.productId;
 
     const matchingProduct = getProduct(productId);
@@ -118,7 +113,7 @@ export function renderOrrderSummary() {
   document.querySelectorAll(".js-delete-link").forEach((link) => {
     link.addEventListener("click", () => {
       const productId = link.dataset.productId;
-      removeFromCart(productId);
+      cart.removeFromCart(productId);
 
       const conatiner = document.querySelector(
         `.js-cart-item-container-${productId}`
@@ -179,7 +174,7 @@ export function renderOrrderSummary() {
               quantityLabel.textContent = newQuantity;
 
               // Update the cart quantity
-              updateQuantity(productId, newQuantity);
+              cart.updateQuantity(productId, newQuantity);
 
               updateCheckoutQuantity();
               renderPaymentSummary();
@@ -211,7 +206,7 @@ export function renderOrrderSummary() {
           if (newQuantity !== "" && newQuantity != 0 && !(newQuantity > 1000)) {
             quantityLabel.textContent = newQuantity;
 
-            updateQuantity(productId, newQuantity);
+            cart.updateQuantity(productId, newQuantity);
 
             updateCheckoutQuantity();
           } else {
@@ -246,7 +241,7 @@ export function renderOrrderSummary() {
   document.querySelectorAll(".js-delivery-option").forEach((element) => {
     element.addEventListener("click", () => {
       const { productId, deliveryOptionId } = element.dataset;
-      updateDeliveryOption(productId, deliveryOptionId);
+      cart.updateDeliveryOption(productId, deliveryOptionId);
       renderOrrderSummary();
       renderPaymentSummary();
     });
@@ -256,7 +251,7 @@ export function renderOrrderSummary() {
 function updateCheckoutQuantity() {
   let cartQuantity = 0;
 
-  cart.forEach((cartItem) => {
+  cart.cartItems.forEach((cartItem) => {
     cartQuantity += cartItem.quantity;
   });
 

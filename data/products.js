@@ -57,6 +57,28 @@ class Clothing extends Product {
   }
 }
 
+class Appliance extends Product {
+  instructionsLinks;
+  warrantyLinks;
+
+  constructor(productDetails) {
+    super(productDetails);
+    this.instructionsLinks = productDetails.instructionsLinks;
+    this.warrantyLinks = productDetails.warrantyLinks;
+  }
+
+  extraInfoHtml() {
+    return `
+      <a href="${this.instructionsLinks}" target="blank">
+        Instructuons
+      </a>
+      <a href="${this.warrantyLinks}" target="blank">
+        Warranty
+      </a>
+    `;
+  }
+}
+
 export const products = [
   {
     id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
@@ -147,6 +169,9 @@ export const products = [
     },
     priceCents: 1899,
     keywords: ["toaster", "kitchen", "appliances"],
+    type: "appliance",
+    instructionsLinks: "image/appliance-instructions.png",
+    warrantyLinks: "image/appliance-warranty.png",
   },
   {
     id: "id1",
@@ -202,6 +227,8 @@ export const products = [
     },
     priceCents: 2400,
     keywords: ["hoodies", "sweaters", "apparel"],
+    type: "clothing",
+    sizeChartLink: "images/clothing-size-chart.png",
   },
   {
     id: "77919bbe-0e56-475b-adde-4f24dfed3a04",
@@ -290,6 +317,9 @@ export const products = [
     },
     priceCents: 3074,
     keywords: ["water boiler", "appliances", "kitchen"],
+    type: "appliance",
+    instructionsLinks: "image/appliance-instructions.png",
+    warrantyLinks: "image/appliance-warranty.png",
   },
   {
     id: "6b07d4e7-f540-454e-8a1e-363f25dbae7d",
@@ -503,6 +533,9 @@ export const products = [
     },
     priceCents: 2250,
     keywords: ["coffeemakers", "kitchen", "appliances"],
+    type: "appliance",
+    instructionsLinks: "image/appliance-instructions.png",
+    warrantyLinks: "image/appliance-warranty.png",
   },
   {
     id: "02e3a47e-dd68-467e-9f71-8bf6f723fdae",
@@ -547,6 +580,9 @@ export const products = [
     },
     priceCents: 10747,
     keywords: ["food blenders", "kitchen", "appliances"],
+    type: "appliance",
+    instructionsLinks: "image/appliance-instructions.png",
+    warrantyLinks: "image/appliance-warranty.png",
   },
   {
     id: "36c64692-677f-4f58-b5ec-0dc2cf109e27",
@@ -580,9 +616,16 @@ export const products = [
     },
     priceCents: 2400,
     keywords: ["sweaters", "hoodies", "apparel", "mens"],
+    type: "clothing",
+    sizeChartLink: "images/clothing-size-chart.png",
   },
 ].map((productDetails) => {
+  if (productDetails.type === "appliance") {
+    console.log("cehcking");
+    return new Appliance(productDetails);
+  }
   if (productDetails.type === "clothing") {
+    console.log("cehcking2");
     return new Clothing(productDetails);
   }
 
