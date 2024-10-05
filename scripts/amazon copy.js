@@ -1,10 +1,9 @@
 import { cart } from "../data/cart-class.js";
-import { products } from "../data/products.js";
+import { products, loadProducts } from "../data/products.js";
 
-document.addEventListener("DOMContentLoaded", function () {
-  // Initial call to update cart quantity display
-  updateCartQuantity();
+loadProducts(renderProductsGrid); //call back = a function to run in future
 
+function renderProductsGrid() {
   let productsHTML = "";
 
   // Loop through each product to generate HTML for the products list
@@ -68,6 +67,29 @@ document.addEventListener("DOMContentLoaded", function () {
   // Insert the generated HTML into the products grid container
   document.querySelector(".js-products-grid").innerHTML = productsHTML;
 
+  // Add event listeners to all "Add to Cart" buttons
+  document.querySelectorAll(".js-add-to-cart").forEach((button) => {
+    button.addEventListener("click", () => {
+      // Get the product ID from the button's data attribute
+      const { productId } = button.dataset;
+
+      // Get the selected quantity from the dropdown
+      let selectedQuantity = document.querySelector(
+        `.js-quantity-selector-${productId}`
+      ).value;
+      selectedQuantity = Number(selectedQuantity);
+
+      // Add the selected quantity of the product to the cart
+      cart.addToCart(productId, selectedQuantity);
+
+      // Update the cart quantity and show the "added to cart" message
+      updateCartQuantity(productId);
+    });
+  });
+
+  // Initial call to update cart quantity display
+  updateCartQuantity();
+
   let timerId;
 
   function updateCartQuantity(productId) {
@@ -101,24 +123,11 @@ document.addEventListener("DOMContentLoaded", function () {
       }, 1200);
     }
   }
+}
 
-  // Add event listeners to all "Add to Cart" buttons
-  document.querySelectorAll(".js-add-to-cart").forEach((button) => {
-    button.addEventListener("click", () => {
-      // Get the product ID from the button's data attribute
-      const { productId } = button.dataset;
-
-      // Get the selected quantity from the dropdown
-      let selectedQuantity = document.querySelector(
-        `.js-quantity-selector-${productId}`
-      ).value;
-      selectedQuantity = Number(selectedQuantity);
-
-      // Add the selected quantity of the product to the cart
-      cart.addToCart(productId, selectedQuantity);
-
-      // Update the cart quantity and show the "added to cart" message
-      updateCartQuantity(productId);
-    });
-  });
+/* //added this bcz when first i was working on website the contents would not fully load but the 
+  //properties were accesing the data.
+document.addEventListener("DOMContentLoaded", function () {
+  //renderProductsGrid();
 });
+*/
