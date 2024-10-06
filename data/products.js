@@ -102,7 +102,10 @@ export function loadProducts(fun) {
     fun();
   });
 
-  xhr.open("GET", "https://supersimplebackend.dev/products");
+  xhr.open(
+    "GET",
+    "https://hashir58.github.io/Amazon-Clone-Products/MyProducts.json"
+  );
   xhr.send();
 }
 
