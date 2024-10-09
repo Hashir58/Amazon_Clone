@@ -14,8 +14,8 @@ async function loadPage() {
     const value = await new Promise((resolve, reject) => {
       //throw "error2";
       loadCart(() => {
-        reject("error3");
-        //resolve("value"); //the value in resolve is return and then we can store in some variable.
+        //reject("error3");
+        resolve("value"); //the value in resolve is return and then we can store in some variable.
       });
     });
   } catch (error) {
