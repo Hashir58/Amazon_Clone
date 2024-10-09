@@ -6,13 +6,21 @@ import { loadProducts, loadProductsFetch } from "../data/products.js";
 import { loadCart } from "../data/cart-class.js";
 
 async function loadPage() {
-  await loadProductsFetch();
+  try {
+    //throw 'error1';
 
-  const value = await new Promise((resolve) => {
-    loadCart(() => {
-      resolve("value"); //the value in resolve is return and then we can store in some variable.
+    await loadProductsFetch();
+
+    const value = await new Promise((resolve, reject) => {
+      //throw "error2";
+      loadCart(() => {
+        reject("error3");
+        //resolve("value"); //the value in resolve is return and then we can store in some variable.
+      });
     });
-  });
+  } catch (error) {
+    console.log("unexpected error. please try again later");
+  }
 
   renderOrrderSummary();
   renderPaymentSummary();
