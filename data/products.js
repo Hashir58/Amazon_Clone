@@ -81,6 +81,7 @@ class Appliance extends Product {
 
 export let products = [];
 
+//Through Fetch Request
 export function loadProductsFetch() {
   const promise = fetch(
     "https://hashir58.github.io/Amazon-Clone-Products/MyProducts.json"
@@ -116,6 +117,7 @@ loadProductsFetch().then(() => {
 });
 */
 
+//XML Request
 export function loadProducts(fun) {
   const xhr = new XMLHttpRequest();
 
